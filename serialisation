@@ -1,0 +1,52 @@
+import java.io.*;
+
+// Step 1: Define the Person class that implements Serializable
+class Person implements Serializable {
+    private static final long serialVersionUID = 1L;
+    int age;
+
+    // Constructor to initialize age
+    public Person(int age) {
+        this.age = age;
+    }
+
+    // Method to classify the age group
+    public String getAgeGroup() {
+        if (age >= 0 && age <= 12) {
+            return "Kid";
+        } else if (age >= 13 && age <= 19) {
+            return "Teen";
+        } else {
+            return "Adult";
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        try {
+            // Step 2: Input age from the user
+            Scanner in = new Scanner(System.in);
+            int age = in.nextInt();
+            in.close();
+
+            // Step 3: Serialize the Person object to person.ser
+            Person person = new Person(age);
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("person.ser"))) {
+                oos.writeObject(person);
+            }
+
+            // Step 4: Deserialize the Person object from person.ser
+            Person deserializedPerson;
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("person.ser"))) {
+                deserializedPerson = (Person) ois.readObject();
+            }
+
+            // Step 5: Classify and display the age group
+            System.out.println(deserializedPerson.getAgeGroup());
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}
