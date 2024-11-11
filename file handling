@@ -1,0 +1,62 @@
+//question 1- file handling
+
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        
+        // Input the number of items
+        int N = in.nextInt();
+        
+        // Input the item prices
+        double[] prices = new double[N];
+        for (int i = 0; i < N; i++) {
+            prices[i] = in.nextDouble();
+        }
+        
+        // Writing the item prices to prices.txt
+        try (PrintWriter writer = new PrintWriter(new FileWriter("prices.txt"))) {
+            for (int i = 0; i < N; i++) {
+                writer.print(prices[i] + " ");
+            }
+            writer.println();  // New line after the prices
+        } catch (IOException e) {
+            System.out.println("An error occurred while writing to prices.txt");
+        }
+        
+        // Read the prices from prices.txt, apply tax, and write to tax.txt
+        try (BufferedReader reader = new BufferedReader(new FileReader("prices.txt"));
+             PrintWriter writer = new PrintWriter(new FileWriter("tax.txt"))) {
+            
+            String line = reader.readLine();
+            String[] priceStrings = line.split(" ");
+            
+            // List to store taxed amounts
+            List<Double> taxedAmounts = new ArrayList<>();
+            
+            // Apply 10% tax to each item
+            for (String priceStr : priceStrings) {
+                double price = Double.parseDouble(priceStr);
+                double taxedPrice = price * 1.10;  // Apply 10% tax
+                taxedAmounts.add(taxedPrice);
+            }
+            
+            // Write taxed amounts to tax.txt
+            for (double taxedAmount : taxedAmounts) {
+                writer.printf("%.2f ", taxedAmount);  // Format to 2 decimal places
+            }
+            writer.println();  // New line after the taxed amounts
+            
+            // Output taxed amounts to console
+            for (double taxedAmount : taxedAmounts) {
+                System.out.printf("%.2f ", taxedAmount);  // Display taxed amounts
+            }
+            System.out.println();
+            
+        } catch (IOException e) {
+            System.out.println("An error occurred while reading from or writing to files.");
+        }
+    }
+}
