@@ -1,0 +1,42 @@
+// You are using Java
+import java.util.*;
+import java.io.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        try(PrintWriter writer = new PrintWriter(new FileWriter("student.txt"))) {
+            int n = in.nextInt();
+            int[] scores = new int[n];
+            for (int i=0;i<n;i++) {
+                scores[i] = in.nextInt();
+                writer.print(scores[i] + " ");
+            }
+            writer.println();
+        } catch(IOException e) {
+            System.out.println("Error!");
+        }
+        try(BufferedReader reader = new BufferedReader(new FileReader("student.txt"));
+            PrintWriter writer = new PrintWriter(new FileWriter("performance.txt"))) {
+            
+            String line = reader.readLine();
+            String[] scores1 = line.split(" ");
+            double total=0;
+            double avg;
+            int count=0;
+            for (String score : scores1) {
+                double scoreD = Double.parseDouble(score);
+                total += scoreD;
+                count+=1;
+                writer.print(scoreD + " ");
+            }
+            avg = total/count;
+            writer.println();
+            writer.println(avg);
+            System.out.printf("Total Score: %d\n",(int)total);
+            System.out.printf("Average: %.1f\n",avg);
+        } catch(IOException e) {
+            System.out.println("Error!");
+        }
+    }
+}
